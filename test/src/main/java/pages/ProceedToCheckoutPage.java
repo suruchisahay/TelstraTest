@@ -3,8 +3,6 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.Status;
 import com.telstra.base.Base;
@@ -13,10 +11,9 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import reports.ExtentTestManager;
+import util.WaitLibrary;
 
 public class ProceedToCheckoutPage extends Base{
-	
-	WebDriverWait wait = new WebDriverWait(driver, 90);
 	
 	@AndroidFindBy(uiAutomator = "new UiSelector().text(\"Proceed to checkout\")")
 	private AndroidElement proceedToCheckoutButton;
@@ -36,7 +33,7 @@ public class ProceedToCheckoutPage extends Base{
 	 * Click on proceed to checkout button
 	 */
 	public Object clickOnProceedToCheckOutButon() {
-		wait.until(ExpectedConditions.visibilityOf(proceedToCheckoutButton));
+		WaitLibrary.waitTillElementVisible(proceedToCheckoutButton);
 		proceedToCheckoutButton.click();
 		ExtentTestManager.getTest().log(Status.INFO, "CLicked on Proceed to Checkout button");
 		if (textBox.size() == 0)

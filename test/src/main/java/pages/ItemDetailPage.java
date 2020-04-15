@@ -1,8 +1,6 @@
 package pages;
 
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.Status;
 import com.telstra.base.Base;
@@ -12,11 +10,9 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import reports.ExtentTestManager;
 import util.CommonUtil;
-import util.Constants;
 import util.WaitLibrary;
 
 public class ItemDetailPage extends Base{
-	WebDriverWait wait = new WebDriverWait(driver, Constants.EXPLICIT_TIME);
 	
 	CommonUtil util = new CommonUtil();
 	
@@ -38,8 +34,8 @@ public class ItemDetailPage extends Base{
 		try {
 			WaitLibrary.staticWait(30000);
 			System.out.println(header.isDisplayed());
-			wait.until(ExpectedConditions.visibilityOf(header));
-			ExtentTestManager.getTest().log(Status.PASS, "Item detail page visible");
+			WaitLibrary.waitTillElementVisible(header);
+			ExtentTestManager.getTest().log(Status.INFO, "Item detail page visible ");
 			return header.isDisplayed();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -52,10 +48,16 @@ public class ItemDetailPage extends Base{
 	 * click on see All Buying options to choose price from various vendors
 	 */
 	public ItemBuyingOptionPage clickSeeAllBuyingOptionButton() {
-		wait.until(ExpectedConditions.visibilityOf(seeAllBuyingOptionButton));
-		seeAllBuyingOptionButton.click();
-		ExtentTestManager.getTest().log(Status.INFO, "Clicked on See All Buying Option button");
-		return new ItemBuyingOptionPage();
+		try {
+			WaitLibrary.waitTillElementVisible(seeAllBuyingOptionButton);
+			seeAllBuyingOptionButton.click();
+			ExtentTestManager.getTest().log(Status.INFO, "Clicked on See All Buying Option button");
+			return new ItemBuyingOptionPage();
+		}catch(Exception e) {
+			ExtentTestManager.getTest().log(Status.FAIL, "No seller is selling this item currently");
+			return null;
+		}
+		
 	}
 	
 	/*
@@ -63,18 +65,18 @@ public class ItemDetailPage extends Base{
 	 */
 	public void clickAddToCart() {
 		util.scroll("down");
-		wait.until(ExpectedConditions.visibilityOf(addToCartButton));
+		WaitLibrary.waitTillElementVisible(addToCartButton);
 		addToCartButton.click();
 		ExtentTestManager.getTest().log(Status.PASS, "Clicked on Add to Cart Button successfully");
 		WaitLibrary.staticWait(5000);
-		wait.until(ExpectedConditions.visibilityOf(addToCartButton));
+		WaitLibrary.waitTillElementVisible(addToCartButton);
 	}
 	
 	/*
 	 * check if add to cart is visible , if not then check buy all options is visible and use it.
 	 */
-	public Object addItemDynamically() {
-		//check if add to cart is visible , if not then check buy all options is visible and use it.
+	public Object addItem() {
+		//check if add to cart is visible , if not then click on buy all options.
 		try {
 			//add Item to cart by checking if add to cart button is visible
 				clickAddToCart(); //add Item to cart

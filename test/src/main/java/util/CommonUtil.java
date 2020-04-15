@@ -233,6 +233,9 @@ public class CommonUtil extends Base{
 		case "space":
 			driver.pressKey(new KeyEvent(AndroidKey.SPACE));
 			break;
+		case "search":
+			driver.pressKey(new KeyEvent(AndroidKey.SEARCH));
+			break;
 		default:
 			System.out.println("Not presnt in the case");
 			

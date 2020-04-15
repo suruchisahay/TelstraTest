@@ -2,8 +2,6 @@ package pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.Status;
 import com.telstra.base.Base;
@@ -12,11 +10,21 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import reports.ExtentTestManager;
-import util.Constants;
+import util.CommonUtil;
+import util.WaitLibrary;
 
 public class LoginPage extends Base{
 	
-	WebDriverWait wait = new WebDriverWait(driver, Constants.EXPLICIT_TIME);
+	CommonUtil util = new CommonUtil();
+	
+	@AndroidFindBy(xpath = "//android.widget.Button[@text = 'Already a customer? Sign in']")
+	private AndroidElement signInLink;
+	
+	@AndroidFindBy(xpath = "//android.widget.Button[@text = 'New to Amazon.com? Create an account']")
+	private AndroidElement createAccount;
+	
+	@AndroidFindBy(xpath = "//android.widget.Button[@text = 'Skip sign in']")
+	private AndroidElement skipSignIn;
 	
 	@AndroidFindBy(className = "android.widget.EditText")
 	private AndroidElement passwordTextBox;
@@ -28,6 +36,15 @@ public class LoginPage extends Base{
 	private AndroidElement signInButton;
 	
 	@AndroidFindBy(xpath = "//android.view.View[@text = 'Sign-In']")
+	private AndroidElement SignInheader;
+	
+	@AndroidFindBy(className = "android.widget.EditText")
+	private AndroidElement emailTextBox;
+	
+	@AndroidFindBy(className = "android.widget.Button")
+	private AndroidElement continueButton;
+	
+	@AndroidFindBy(uiAutomator = "new UiSelector().text(\"Welcome\")")
 	private AndroidElement header;
 	
 	public LoginPage() {
@@ -36,15 +53,41 @@ public class LoginPage extends Base{
 	}
 	
 	/*
+	 * Click on sign In Button
+	 */
+	public void clickOnAlreadyCustomerSignInLink() {
+		WaitLibrary.waitTillElementVisible(signInLink);
+		signInLink.click();
+		ExtentTestManager.getTest().log(Status.INFO, "Clicked on Already a customer? sign-in Button");
+	}
+	
+	/*
+	 * Click on Skip sign in button
+	 */
+	public void clickOnSkipSignIn() {
+		WaitLibrary.waitTillElementVisible(skipSignIn);
+		skipSignIn.click();	
+	}
+	 
+	/*
+	 * Click on create account button
+	 */
+	public void clickOnCreateAccount() {
+		WaitLibrary.waitTillElementVisible(createAccount);
+		createAccount.click();	
+	}
+
+	
+	/*
 	 * Checks if the login page is visible
 	 */
-	public boolean isLoginPageVisible() {
+	public boolean isPasswordTextBoxVisible() {
 		try {
-			wait.until(ExpectedConditions.visibilityOf(header));
-			ExtentTestManager.getTest().log(Status.PASS, "Login Page visible");
-			return header.isDisplayed();
+			WaitLibrary.waitTillElementVisible(passwordTextBox);
+			ExtentTestManager.getTest().log(Status.PASS, "Password TextBox is visible");
+			return passwordTextBox.isDisplayed();
 		}catch(Exception e) {
-			ExtentTestManager.getTest().log(Status.FAIL, "Login Page is not visible");
+			ExtentTestManager.getTest().log(Status.FAIL, "Password Text box is not visible");
 			return false;
 		}
 		
@@ -53,8 +96,7 @@ public class LoginPage extends Base{
 	/*
 	 * Checks if the email id is as expected
 	 */
-	public boolean isEmailIdCorrect(String expectedEmailId) {
-		//List<MobileElement> list1 = driver.findElementsByAndroidUIAutomator("new UiSelector().clickable(value)");
+	public boolean validateExpectedEmailId(String expectedEmailId) {
 		if (driver.findElementByAndroidUIAutomator("text(\""+ expectedEmailId + "\")").isDisplayed())
 			return true;
 		else
@@ -62,10 +104,10 @@ public class LoginPage extends Base{
 	}
 	
 	/*
-	 * Enters the password
+	 * Enter the password
 	 */
 	public void enterPassword(String password) {
-		wait.until(ExpectedConditions.visibilityOf(passwordTextBox));
+		WaitLibrary.waitTillElementVisible(passwordTextBox);
 		passwordTextBox.sendKeys(password);
 		ExtentTestManager.getTest().log(Status.PASS, "Entered Password successfully");
 	}
@@ -73,19 +115,21 @@ public class LoginPage extends Base{
 	/*
 	 * Check / Uncheck the show password checkBox
 	 */
-	public void checkUncheckShowPassword(String expectedValue) {
+	public void checkUncheckShowPasswordCheckBox(String expectedValue) {
+		ExtentTestManager.getTest().log(Status.INFO, "Clicking on checkbox to " + expectedValue);
 		WebElement checkBox = (driver).findElementByAndroidUIAutomator("new UiSelector().text(\"Show password\")");
-		wait.until(ExpectedConditions.visibilityOf(checkBox));
+		WaitLibrary.waitTillElementVisible(checkBox);
 		String actualChecked =  checkBox.getAttribute("checked");
 		System.out.println(actualChecked);
 		if (expectedValue.equalsIgnoreCase("uncheck")) {
-			if (actualChecked.equalsIgnoreCase("true"))
+			if (actualChecked.equalsIgnoreCase("true")) {
 				checkBox.click();
+			}
 			else
-				System.out.println("Check box already unchecked");
+				ExtentTestManager.getTest().log(Status.INFO, "Check box already unchecked");
 		} else if (expectedValue.equalsIgnoreCase("check")) {
 			if (actualChecked.equalsIgnoreCase("true"))
-				System.out.println("Check box already Checked");
+				ExtentTestManager.getTest().log(Status.INFO, "Check box already Checked");
 			else
 				checkBox.click();
 		}
@@ -94,11 +138,51 @@ public class LoginPage extends Base{
 	/*
 	 * Click on Sign -In Button
 	 */
-	public HomePage clickSignInButton() {
-		wait.until(ExpectedConditions.visibilityOf(signInButton));
-		signInButton.click();
+	public HomePage tapOnSignInButton() {
+		WaitLibrary.waitTillElementVisible(signInButton);
+		util.tap(signInButton);
+		//signInButton.click();
 		ExtentTestManager.getTest().log(Status.PASS, "clicked on sign-in button");
 		return new HomePage();
 	}
+	
+	/*
+	 * Checks if the page is displayed in screen by verifying the header of the page
+	 */
+	public boolean isEnterEmailTextBoxVisible() {
+		try {
+			System.out.println(header.isDisplayed());
+			WaitLibrary.waitTillElementVisible(header);
+			ExtentTestManager.getTest().log(Status.INFO, "Enter Email Text box is visible" + header.isDisplayed());
+			return header.isDisplayed();
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	
+	/*
+	 * enter email id on the email id text box
+	 */
+	public void enterEmailId(String emailId) {
+		WaitLibrary.waitTillElementVisible(emailTextBox);
+		emailTextBox.sendKeys(emailId);
+		WaitLibrary.waitTillTextToBePresentInElement(emailTextBox, emailId);
+		ExtentTestManager.getTest().log(Status.INFO, "Entered Email id " + emailId);
+	}
+	
+	
+	/*
+	 * Click on continue button
+	 */
+	public void clickContinueButton() {
+		WaitLibrary.waitTillElementVisible(continueButton);
+		continueButton.click();
+		ExtentTestManager.getTest().log(Status.INFO, "Clicked on Continue Button");
+	}
+
+	
 
 }

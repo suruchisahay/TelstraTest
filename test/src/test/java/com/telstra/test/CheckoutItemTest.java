@@ -27,6 +27,8 @@ public class CheckoutItemTest extends Base{
 	EnterShippingAddressPage enterShippingAddressPage;
 	SelectShippingAddressPage selectShippingAddressPage;
 	
+	String item = "Sceptre 65";
+	
 	@BeforeMethod
 	public void setup() {
 		homePage = new HomePage();
@@ -34,35 +36,38 @@ public class CheckoutItemTest extends Base{
 	
 	@Test
 	public void checkoutItem() {
-		Assert.assertTrue(homePage.isHomePageVisible());
+		Assert.assertTrue(homePage.isHomePageVisible(), "Home Page is not visible");
 		WaitLibrary.staticWait(3000);
-		Assert.assertTrue(homePage.searchItem("65-Inch tv"));
-		itemDetailPage = homePage.scrollItemListAndSelectItem("Toshiba");
-		Assert.assertTrue(itemDetailPage.isItemDetailPageVisible());
-		Object itemPage = itemDetailPage.addItemDynamically();
+		Assert.assertTrue(homePage.searchItem("65-Inch tv"), "Search result for item is not displayed");
+		itemDetailPage = homePage.scrollTillItemAndClick(item);
+		Assert.assertTrue(itemDetailPage.isItemDetailPageVisible(), "Item Page is not visible after clicking on the item");
+		Object itemPage = itemDetailPage.addItem();
 		
 		if (itemPage instanceof ItemBuyingOptionPage) {
 			itemBuyingOptionPage = (ItemBuyingOptionPage) itemPage;
-			Assert.assertTrue(itemBuyingOptionPage.isPageVisible("Toshiba"));
-			itemBuyingOptionPage.buyCheapestOption();
-	
+			Assert.assertTrue(itemBuyingOptionPage.isPageVisible(item), "Item Buying options are not visible");
+			itemBuyingOptionPage.buyOption(1);
 		}
 		
 		/*Checkout */
 		proceedToCheckoutPage = getMenu().clickOnShoppingCart();
 		Assert.assertEquals(proceedToCheckoutPage.confirmItemForCheckout(), homePage.getExpectedItemNameAddedToCart(), "Actual and Expected Item name are not same");
 		ExtentTestManager.getTest().log(Status.PASS, "Item in Checkout page and item page are same " + homePage.getExpectedItemNameAddedToCart());
+		
+		//Object as proceed to checkout can lead to either already entered address page or if no address is present then to enter shipping address page
 		Object addressObject = proceedToCheckoutPage.clickOnProceedToCheckOutButon();
 		
 		if (addressObject instanceof SelectShippingAddressPage) {
+			//select shipping address from list of address
 			selectShippingAddressPage = (SelectShippingAddressPage) addressObject;
-			Assert.assertTrue(selectShippingAddressPage.isShippingPageVisible());
+			Assert.assertTrue(selectShippingAddressPage.isShippingPageVisible(), "select shipping address page is not visible");
 			Assert.assertTrue(selectShippingAddressPage.selectAddress("Pune"), "Address not available in address list");
 			selectShippingAddressPage.clickDeliverToThisAddress();
 		} else if (addressObject instanceof EnterShippingAddressPage) {
+			//add new address
 			WaitLibrary.staticWait(5000);
 			enterShippingAddressPage = (EnterShippingAddressPage) addressObject;
-			Assert.assertTrue(enterShippingAddressPage.isShippingPageVisible());
+			Assert.assertTrue(enterShippingAddressPage.isShippingPageVisible(), "Enter Shipping Address is not visible");
 			enterShippingAddressPage.enterAddress("Pune", "Pune", "Maharashtra", 411027, 1234567890, "India");
 			enterShippingAddressPage.clickContinueButton();
 		}

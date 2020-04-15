@@ -3,8 +3,6 @@ package pages;
 import java.util.List;
 
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.Status;
 import com.telstra.base.Base;
@@ -20,9 +18,7 @@ public class EnterShippingAddressPage extends Base{
 	
 	CommonUtil util = new CommonUtil();
 	
-	WebDriverWait wait = new WebDriverWait(driver, 90);
-	
-	@AndroidFindBy(className = "android.widget.EditText") //[@id = 'enterAddressAddressLine1']
+	@AndroidFindBy(className = "android.widget.EditText") 
 	private List<AndroidElement> streetAddress;
 	
 	@AndroidFindBy(className = "android.widget.Spinner")
@@ -62,7 +58,7 @@ public class EnterShippingAddressPage extends Base{
 	 * Checks if the page is displayed
 	 */
 	public boolean isShippingPageVisible() {
-		wait.until(ExpectedConditions.visibilityOf(header));
+		WaitLibrary.waitTillElementVisible(header);
 		return header.isDisplayed();
 	}
 	
@@ -78,9 +74,9 @@ public class EnterShippingAddressPage extends Base{
 		streetAddress.get(5).sendKeys(zipCode + ""); //enter the zip code
 		streetAddress.get(6).sendKeys(phone + ""); //enter the phone 
 		country.click(); //click on country 
-		wait.until(ExpectedConditions.visibilityOf(closeBtn)); //wait till the country dialogue is displayed
+		WaitLibrary.waitTillElementVisible(closeBtn); //wait till the country dialogue is displayed
 		selectCountry(countryName);
-		wait.until(ExpectedConditions.visibilityOf(header)); //wait till country is selected and dialogue is closed
+		WaitLibrary.waitTillElementVisible(header); //wait till country is selected and dialogue is closed
 		ExtentTestManager.getTest().log(Status.INFO, "Entered address details for " + countryName);
 	}
 	
@@ -91,7 +87,7 @@ public class EnterShippingAddressPage extends Base{
 	public void clickContinueButton() {
 		util.scrollTillText("android.webkit.WebView", "Continue");
 		//util.scrollBackward("Continue");
-		wait.until(ExpectedConditions.visibilityOf(continueBtn));
+		WaitLibrary.waitTillElementVisible(continueBtn);
 		continueBtn.click();
 		System.out.println("clicked on continue button");
 		ExtentTestManager.getTest().log(Status.INFO, "Clicked on Continue button");
@@ -102,7 +98,7 @@ public class EnterShippingAddressPage extends Base{
 	 */
 	public void clickDeliverToThisAddress() {
 		util.scrollTillText("android.webkit.WebView", "Deliver to this address");
-		wait.until(ExpectedConditions.visibilityOf(submitAddressBtn));
+		WaitLibrary.waitTillElementVisible(submitAddressBtn);
 		submitAddressBtn.click();
 	}
 	

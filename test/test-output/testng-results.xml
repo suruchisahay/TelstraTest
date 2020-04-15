@@ -2,38 +2,38 @@
 <testng-results skipped="0" failed="0" ignored="1" total="3" passed="2">
   <reporter-output>
   </reporter-output>
-  <suite name="telstra" duration-ms="459398" started-at="2020-04-13T18:02:43Z" finished-at="2020-04-13T18:10:23Z">
+  <suite name="telstra" duration-ms="461027" started-at="2020-04-15T11:52:49Z" finished-at="2020-04-15T12:00:30Z">
     <groups>
     </groups>
-    <test name="Test" duration-ms="459398" started-at="2020-04-13T18:02:43Z" finished-at="2020-04-13T18:10:23Z">
+    <test name="Test" duration-ms="461027" started-at="2020-04-15T11:52:49Z" finished-at="2020-04-15T12:00:30Z">
       <class name="com.telstra.test.LoginTest">
-        <test-method status="PASS" signature="beforeSuit()[pri:0, instance:com.telstra.test.LoginTest@3e8c3cb]" name="beforeSuit" is-config="true" duration-ms="3872" started-at="2020-04-13T18:02:40Z" finished-at="2020-04-13T18:02:43Z">
+        <test-method status="PASS" signature="beforeSuit()[pri:0, instance:com.telstra.test.LoginTest@563f38c4]" name="beforeSuit" is-config="true" duration-ms="332" started-at="2020-04-15T11:52:49Z" finished-at="2020-04-15T11:52:49Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeSuit -->
-        <test-method status="PASS" signature="setup()[pri:0, instance:com.telstra.test.LoginTest@3e8c3cb]" name="setup" is-config="true" duration-ms="4814" started-at="2020-04-13T18:02:43Z" finished-at="2020-04-13T18:02:48Z">
+        <test-method status="PASS" signature="setup()[pri:0, instance:com.telstra.test.LoginTest@563f38c4]" name="setup" is-config="true" duration-ms="343" started-at="2020-04-15T11:52:49Z" finished-at="2020-04-15T11:52:50Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method status="PASS" signature="loginTest1()[pri:0, instance:com.telstra.test.LoginTest@3e8c3cb]" name="loginTest1" duration-ms="78808" started-at="2020-04-13T18:02:48Z" finished-at="2020-04-13T18:04:07Z">
+        <test-method status="PASS" signature="loginTest1()[pri:0, instance:com.telstra.test.LoginTest@563f38c4]" name="loginTest1" duration-ms="97418" started-at="2020-04-15T11:52:50Z" finished-at="2020-04-15T11:54:27Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- loginTest1 -->
-        <test-method status="PASS" signature="cleanUp()[pri:0, instance:com.telstra.test.LoginTest@3e8c3cb]" name="cleanUp" is-config="true" duration-ms="0" started-at="2020-04-13T18:04:07Z" finished-at="2020-04-13T18:04:07Z">
+        <test-method status="PASS" signature="cleanUp()[pri:0, instance:com.telstra.test.LoginTest@563f38c4]" name="cleanUp" is-config="true" duration-ms="0" started-at="2020-04-15T11:54:27Z" finished-at="2020-04-15T11:54:27Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- cleanUp -->
       </class> <!-- com.telstra.test.LoginTest -->
       <class name="com.telstra.test.CheckoutItemTest">
-        <test-method status="PASS" signature="setup()[pri:0, instance:com.telstra.test.CheckoutItemTest@563f38c4]" name="setup" is-config="true" duration-ms="27" started-at="2020-04-13T18:04:07Z" finished-at="2020-04-13T18:04:07Z">
+        <test-method status="PASS" signature="setup()[pri:0, instance:com.telstra.test.CheckoutItemTest@543295b0]" name="setup" is-config="true" duration-ms="3" started-at="2020-04-15T11:54:27Z" finished-at="2020-04-15T11:54:27Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method status="PASS" signature="checkoutItem()[pri:0, instance:com.telstra.test.CheckoutItemTest@563f38c4]" name="checkoutItem" duration-ms="375684" started-at="2020-04-13T18:04:07Z" finished-at="2020-04-13T18:10:23Z">
+        <test-method status="PASS" signature="checkoutItem()[pri:0, instance:com.telstra.test.CheckoutItemTest@543295b0]" name="checkoutItem" duration-ms="363213" started-at="2020-04-15T11:54:27Z" finished-at="2020-04-15T12:00:30Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- checkoutItem -->
-        <test-method status="PASS" signature="cleanUp()[pri:0, instance:com.telstra.test.CheckoutItemTest@563f38c4]" name="cleanUp" is-config="true" duration-ms="5055" started-at="2020-04-13T18:10:25Z" finished-at="2020-04-13T18:10:30Z">
+        <test-method status="PASS" signature="cleanUp()[pri:0, instance:com.telstra.test.CheckoutItemTest@543295b0]" name="cleanUp" is-config="true" duration-ms="7978" started-at="2020-04-15T12:00:33Z" finished-at="2020-04-15T12:00:41Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- cleanUp -->

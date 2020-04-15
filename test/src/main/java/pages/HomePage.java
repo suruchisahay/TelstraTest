@@ -2,27 +2,20 @@ package pages;
 
 import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.Status;
 import com.telstra.base.Base;
 
 import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import reports.ExtentTestManager;
 import util.CommonUtil;
-import util.Constants;
 import util.WaitLibrary;
 
 public class HomePage extends Base{
 	
-	WebDriverWait wait = new WebDriverWait(driver, Constants.EXPLICIT_TIME);
 	CommonUtil util = new CommonUtil();
 	
 	private String expectedItemName;
@@ -52,7 +45,7 @@ public class HomePage extends Base{
 	 */
 	public boolean isHomePageVisible() {
 		try {
-			wait.until(ExpectedConditions.visibilityOf(searchBox));
+			WaitLibrary.waitTillElementVisible(searchBox);
 			ExtentTestManager.getTest().log(Status.PASS, "Login successful");
 			return searchBox.isDisplayed();
 		}catch(Exception e) {
@@ -66,20 +59,22 @@ public class HomePage extends Base{
 	
 	public boolean searchItem(String itemName) {
 		/* Click on search and enter the itemName in the search box */
-		wait.until(ExpectedConditions.visibilityOf(search));
+		WaitLibrary.waitTillElementVisible(search);
+		ExtentTestManager.getTest().log(Status.INFO, "searching for item " + itemName);
 		searchBox.click();
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.EditText")));
+		//wait.until(ExpectedConditions.presenceOfElementLocated(By.className("android.widget.EditText")));
+		WaitLibrary.waitTillPresenceOfElementLocated("class", "android.widget.EditText");
 		search.sendKeys(itemName);
-		driver.pressKey(new KeyEvent(AndroidKey.SEARCH));
-		System.out.println("clicked on search");
+		ExtentTestManager.getTest().log(Status.INFO, "Entered in search box item " + itemName);
+		util.pressKey("search");
+		//driver.pressKey(new KeyEvent(AndroidKey.SEARCH));
 		getItemFromListById("com.amazon.mShop.android.shopping:id/iss_search_dropdown_item_suggestions", 1); //clicks on the 1st auto suggestion from the ajax suggestion in the search box
 		WaitLibrary.staticWait(3000);
 		searchBox.click();
 		WaitLibrary.staticWait(3000);
-		ExtentTestManager.getTest().log(Status.INFO, "Entered in search box item " + itemName);
 		getItemFromListById("com.amazon.mShop.android.shopping:id/iss_search_dropdown_item_suggestions", 1);
 		AndroidElement result = driver.findElementByAndroidUIAutomator("new UiSelector().textContains(\"Results\")");
-		wait.until(ExpectedConditions.visibilityOf(result));
+		WaitLibrary.waitTillElementVisible(result);
 		ExtentTestManager.getTest().log(Status.PASS, "Search results are visible for item " + itemName);
 		System.out.println(result.isDisplayed());
 		return result.isDisplayed();
@@ -101,8 +96,8 @@ public class HomePage extends Base{
 	
 	/* scrolls in the home Page and clicks on the desired item*/
 	
-	public ItemDetailPage scrollItemListAndSelectItem(String itemName) {
-		wait.until(ExpectedConditions.visibilityOf(webView));
+	public ItemDetailPage scrollTillItemAndClick(String itemName) {
+		WaitLibrary.waitTillElementVisible(webView);
 		util.scrollTillText("android.webkit.WebView", itemName);
 		AndroidElement item = driver.findElementByAndroidUIAutomator("new UiSelector().textContains(\"" + itemName + "\")");
 		expectedItemName = item.getAttribute("text").trim();
